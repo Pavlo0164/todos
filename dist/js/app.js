@@ -10,7 +10,9 @@ class App extends Functions {
 	}
 	reshowTasks() {
 		Array.from(this.tasksWrapper.children).forEach((el) => el.remove())
-		this.tasks.forEach((task) => task.putElementIn(this.tasksWrapper))
+		this.tasks.forEach((task) =>
+			new Task(task.taskValue, task.checkBoxId).putElementIn(this.tasksWrapper)
+		)
 	}
 	deleteTask(e) {
 		this.tasks = this.tasks.filter(
@@ -19,11 +21,26 @@ class App extends Functions {
 		this.reshowTasks()
 	}
 	createTask(e) {
-		this.tasks.push(new Task(e.detail.taskValue, this.tasks.length + 1))
+		this.tasks.push({
+			status: "active",
+			taskValue: e.detail.taskValue,
+			checkBoxId: this.tasks.length + 1,
+		})
+		//new Task(e.detail.taskValue, this.tasks.length + 1)
+		sessionStorage.setItem("tasks", JSON.stringify(this.tasks))
 		this.reshowTasks()
 	}
 	switchStatusOfTasks(e) {
 		this.tasks.forEach((task) => task.changeStatus(e.detail.statusOfTasks))
+	}
+	createMain() {
+		this.main = this.createHtmlElement("main", "main")
+
+		this.input = new Input().putElementIn(this.main)
+		this.tasksWrapper = this.createHtmlElement("div", "main__tasks-wrapper")
+
+		this.main.append(this.tasksWrapper)
+		return this.main
 	}
 	render() {
 		const wrapper = this.createHtmlElement("div", "wrapper")
@@ -34,16 +51,10 @@ class App extends Functions {
 			"switchStatusOfTask",
 			this.switchStatusOfTasks.bind(this)
 		)
+
 		this.header = new Header("todos").putElementIn(wrapper)
 
-		this.main = this.createHtmlElement("main", "main")
-
-		this.input = new Input().putElementIn(this.main)
-		this.tasksWrapper = this.createHtmlElement("div", "main__tasks-wrapper")
-
-		this.main.append(this.tasksWrapper)
-
-		wrapper.append(this.main)
+		wrapper.append(this.createMain())
 
 		return wrapper
 	}
