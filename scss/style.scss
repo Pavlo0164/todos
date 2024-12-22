@@ -1,0 +1,130 @@
+@import "_null.scss";
+@import url("https://fonts.googleapis.com/css?family=Poppins:100,200,300,regular,500,700&display=swap");
+
+body {
+	font-family: "Poppins", sans-serif;
+	font-size: 14px;
+	color: #111;
+	background: #f5f5f5;
+	font-weight: 300;
+	line-height: 1.4rem;
+}
+.wrapper {
+	max-width: 40rem;
+	margin: 0 auto;
+	min-height: 100%;
+	@media (max-width: 700px) {
+		margin-left: 0.7rem;
+		margin-right: 0.7rem;
+	}
+}
+.header {
+	&__title {
+		text-align: center;
+		font-size: 5.7rem;
+		font-weight: 200;
+		color: #b83f45;
+		line-height: 200%;
+	}
+}
+.main {
+	box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 25px 50px 0 rgba(0, 0, 0, 0.1);
+	&__input-wrapper {
+		position: relative;
+		border-bottom: 1px solid #ededed;
+	}
+	&__task-wrapper {
+		display: flex;
+		position: relative;
+	}
+	&__tasks-wrapper {
+	}
+	&__input-arrow {
+		cursor: pointer;
+		position: absolute;
+		padding: 0.3rem;
+		left: 1rem;
+		top: 50%;
+		transform: rotate(90deg);
+		margin-top: -0.75rem;
+		width: 1.5rem;
+		height: 1.5rem;
+		background: url("../source/svg/arrow.svg") 0 0 no-repeat;
+		&.active-arrow {
+			background: url("../source/svg/arrow-dark.svg") 0 0 no-repeat;
+		}
+	}
+	&__input {
+		padding: 1.2rem 1.2rem 1.2rem 4.5rem;
+		font-size: 1.7rem;
+		position: relative;
+		box-shadow: inset 0 -2px 1px rgba(0, 0, 0, 0.03);
+		@media (max-width: 500px) {
+			font-size: 1.2rem;
+		}
+		&:focus {
+			box-shadow: 0 0 0.3rem #b83f45;
+			outline: none;
+		}
+	}
+}
+
+.task {
+	&__label-checkbox {
+		padding-left: 2rem;
+		padding-bottom: 2rem;
+		margin: 0.8rem 0.6rem;
+		cursor: pointer;
+		position: relative;
+		&::before {
+			content: "";
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 2rem;
+			height: 2rem;
+			border-radius: 50%;
+			border: 1px solid #999;
+			//border: 1px solid #22850f;
+		}
+		&.inactive::before {
+			border: 1px solid #22850f;
+			background: url("../source/svg/check.svg") center/contain no-repeat;
+		}
+		&.inactive + .task__input {
+			text-decoration: line-through;
+		}
+	}
+	&__check-box {
+		display: none;
+	}
+
+	&__input {
+		font-size: 1.7rem;
+		padding: 1rem;
+		width: 100%;
+		position: relative;
+		&:hover + .task__close {
+			visibility: visible;
+		}
+		&:focus {
+			box-shadow: 0 0 0.3rem #b83f45;
+			outline: none;
+		}
+	}
+	&__close {
+		position: absolute;
+		visibility: hidden;
+		width: 1.5rem;
+		height: 1.5rem;
+		cursor: pointer;
+		top: 50%;
+		right: 0.4rem;
+		margin-top: -0.75rem;
+		background: url("../source/svg/close.svg") center / contain no-repeat;
+		&:hover {
+			background: url("../source/svg/close-red.svg") center / contain no-repeat;
+			visibility: visible;
+		}
+	}
+}
