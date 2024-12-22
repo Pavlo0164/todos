@@ -4,16 +4,18 @@ export default class Input extends Header {
 		super()
 		this.el = this.render()
 	}
+	changeActiveClass() {
+		this.inputArrow.classList.remove("active-arrow")
+	}
 	eventInputArrow(e) {
 		e.target.classList.toggle("active-arrow")
-
+		let isHaveActiveClass = e.target.classList.contains("active-arrow")
 		this.el.dispatchEvent(
 			new CustomEvent("switchStatusOfTask", {
 				bubbles: true,
 				detail: {
-					statusOfTasks: e.target.classList.contains("active-arrow")
-						? "inactive"
-						: "active",
+					statusOfTasks: isHaveActiveClass ? "inactive" : "active",
+					isActiveArrowTasks: isHaveActiveClass,
 				},
 			})
 		)
@@ -43,9 +45,9 @@ export default class Input extends Header {
 		return this.input
 	}
 	createInputArrow() {
-		const inputArrow = this.createHtmlElement("span", "main__input-arrow")
-		inputArrow.addEventListener("click", this.eventInputArrow.bind(this))
-		return inputArrow
+		this.inputArrow = this.createHtmlElement("span", "main__input-arrow")
+		this.inputArrow.addEventListener("click", this.eventInputArrow.bind(this))
+		return this.inputArrow
 	}
 	render() {
 		const inputWrapper = this.createHtmlElement("div", "main__input-wrapper")

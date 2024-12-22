@@ -111,6 +111,9 @@ body {
   display: flex;
   position: relative;
 }
+.main__tasks-wrapper > .main__task-wrapper:not(:last-child) {
+  border-bottom: 0.1rem solid #b4b4b4;
+}
 .main__input-arrow {
   cursor: pointer;
   position: absolute;

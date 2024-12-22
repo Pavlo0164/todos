@@ -37,7 +37,8 @@ body {
 		display: flex;
 		position: relative;
 	}
-	&__tasks-wrapper {
+	&__tasks-wrapper > &__task-wrapper:not(:last-child) {
+		border-bottom: 0.1rem solid #b4b4b4;
 	}
 	&__input-arrow {
 		cursor: pointer;

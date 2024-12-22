@@ -1,27 +1,25 @@
 import Header from "./header.js"
 
 export default class Task extends Header {
-	constructor(innerTask, id) {
+	constructor(innerTask, id, status) {
 		super()
 		this.checkBoxId = id
-		this.status = "active"
+		this.status = status
 		this.el = this.render(innerTask)
-	}
-	changeStatus(newStatus) {
-		this.status = newStatus
-		if (this.status === "active")
-			this.checkBoxLabel.classList.remove("inactive")
-		else this.checkBoxLabel.classList.add("inactive")
 	}
 
 	eventCheckbox(e) {
-		if (e.target.checked) {
-			this.status = "inactive"
-			this.checkBoxLabel.classList.add("inactive")
-		} else {
-			this.status = "active"
-			this.checkBoxLabel.classList.remove("inactive")
-		}
+		if (e.target.checked) this.status = "inactive"
+		else this.status = "active"
+		this.el.dispatchEvent(
+			new CustomEvent("changeTaskStatus", {
+				bubbles: true,
+				detail: {
+					taskId: this.checkBoxId,
+					newStatus: this.status,
+				},
+			})
+		)
 	}
 	lockFunction(e) {
 		let countOfClicks = 0
@@ -48,11 +46,15 @@ export default class Task extends Header {
 			"task__label-checkbox",
 			{ for: `check-box-${this.checkBoxId}` }
 		)
+
 		const checkBox = this.createHtmlElement("input", "task__check-box", {
 			type: "checkbox",
 			id: `check-box-${this.checkBoxId}`,
 		})
-
+		if (this.status === "inactive") {
+			checkBox.setAttribute("checked", "")
+			this.checkBoxLabel.classList.add("inactive")
+		}
 		this.checkBoxLabel.append(checkBox)
 		checkBox.addEventListener("change", this.eventCheckbox.bind(this))
 		return this.checkBoxLabel
