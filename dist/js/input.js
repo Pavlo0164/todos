@@ -21,16 +21,18 @@ export default class Input extends Header {
 		)
 	}
 	eventCreateTask(e) {
-		if (e.target.value !== "" && e.key === "Enter") {
+		e.preventDefault()
+		const { task } = Object.fromEntries(new FormData(e.target).entries())
+		if (task !== "") {
 			this.input.dispatchEvent(
 				new CustomEvent("createTask", {
 					bubbles: true,
 					detail: {
-						taskValue: e.target.value,
+						taskValue: task,
 					},
 				})
 			)
-			e.target.value = ""
+			this.input.value = ""
 		}
 	}
 	createInput() {
@@ -39,9 +41,8 @@ export default class Input extends Header {
 			name: "task",
 			required: "",
 			autofocus: "",
+			type: "text",
 		})
-
-		this.input.addEventListener("keydown", this.eventCreateTask.bind(this))
 		return this.input
 	}
 	createInputArrow() {
@@ -50,8 +51,11 @@ export default class Input extends Header {
 		return this.inputArrow
 	}
 	render() {
-		const inputWrapper = this.createHtmlElement("div", "main__input-wrapper")
-
+		const inputWrapper = this.createHtmlElement("form", "main__input-wrapper", {
+			novalidate: "",
+			name: "input-task",
+		})
+		inputWrapper.addEventListener("submit", this.eventCreateTask.bind(this))
 		inputWrapper.append(this.createInput(), this.createInputArrow())
 		return inputWrapper
 	}

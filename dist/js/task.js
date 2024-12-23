@@ -83,7 +83,7 @@ export default class Task extends Header {
 		return this.inputTask
 	}
 	createButtonDeleteTask() {
-		const close = this.createHtmlElement("p", "task__close")
+		const close = this.createHtmlElement("span", "task__close")
 		close.addEventListener("click", this.eventDeleteTask.bind(this))
 		return close
 	}
@@ -96,7 +96,7 @@ export default class Task extends Header {
 		}
 	}
 	render(innerTask) {
-		const taskWrapper = this.createHtmlElement("label", [
+		const taskWrapper = this.createHtmlElement("li", [
 			"main__task-wrapper",
 			"task",
 		])

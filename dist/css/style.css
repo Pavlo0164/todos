@@ -186,6 +186,7 @@ body {
   outline: none;
 }
 .task__close {
+  display: inline-block;
   position: absolute;
   visibility: hidden;
   width: 1.5rem;

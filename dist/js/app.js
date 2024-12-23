@@ -45,7 +45,7 @@ class App extends Functions {
 
 		this.input = new Input()
 		this.input.putElementIn(this.main)
-		this.tasksWrapper = this.createHtmlElement("div", "main__tasks-wrapper")
+		this.tasksWrapper = this.createHtmlElement("ul", "main__tasks-wrapper")
 
 		this.main.append(this.tasksWrapper)
 		return this.main
