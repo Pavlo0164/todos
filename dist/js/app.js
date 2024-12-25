@@ -61,7 +61,7 @@ class App extends Functions {
 		})
 
 		this.setTasksToBase("tasks", this.tasks)
-		
+
 		this.reshowTasks(this.typeOfShowedTasks)
 	}
 	switchStatusOfTasks(e) {
@@ -87,7 +87,7 @@ class App extends Functions {
 		const observer = new MutationObserver(() => {
 			const tasks = this.tasksWrapper.children
 			if (tasks.length) this.navigation.changeClass("remove")
-			else if (!tasks.length && this.typeOfShowedTasks !== "completed") {
+			else if (!tasks.length && this.typeOfShowedTasks === "all") {
 				this.navigation.changeClass("add")
 			}
 		})
@@ -116,6 +116,7 @@ class App extends Functions {
 	}
 	deleteCompletedTasks() {
 		this.tasks = this.tasks.filter((el) => el.status === "active")
+		this.setTasksToBase("tasks", this.tasks)
 		this.reshowTasks(this.typeOfShowedTasks)
 	}
 	eventShowTasks(e) {

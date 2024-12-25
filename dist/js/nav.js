@@ -88,7 +88,7 @@ export default class Navigation extends Header {
 				this.navigation.classList.remove(name)
 		}
 	}
-	render(amountTasks, amountOfCompleted, amountOfTasks) {
+	render(amountTasks, amountOfCompleted) {
 		this.navigation = this.createHtmlElement("div", [
 			"main__navigation",
 			"navigation",
@@ -113,7 +113,7 @@ export default class Navigation extends Header {
 			"click",
 			this.eventDeleteCompleted.bind(this)
 		)
-		if (!amountOfTasks) this.changeClass("add")
+		if (!amountTasks) this.changeClass("add")
 		this.navigation.append(
 			this.amountOfTasks,
 			this.createMenu(),

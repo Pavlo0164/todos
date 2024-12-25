@@ -46,7 +46,6 @@ export default class Task extends Header {
 			"task__label-checkbox",
 			{ for: `check-box-${this.checkBoxId}` }
 		)
-
 		const checkBox = this.createHtmlElement("input", "task__check-box", {
 			type: "checkbox",
 			id: `check-box-${this.checkBoxId}`,
