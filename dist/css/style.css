@@ -151,6 +151,9 @@ body {
   min-height: 3rem;
   padding: 1rem;
 }
+.main__navigation.hidden {
+  display: none;
+}
 
 .navigation__amount-of-tasks {
   width: 7rem;

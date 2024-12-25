@@ -13,15 +13,14 @@ export default class Navigation extends Header {
 		target.classList.add("active")
 
 		target.dispatchEvent(
-			new CustomEvent('showTasks',{
-				bubbles:true,
-				detail:{
-					typeOfShow:target.getAttribute('data-type-show')
-				}
+			new CustomEvent("showTasks", {
+				bubbles: true,
+				detail: {
+					typeOfShow: target.getAttribute("data-type-show"),
+				},
 			})
 		)
 	}
-	showActiveTasks() {}
 	createMenu() {
 		const menu = this.createHtmlElement("nav", ["navigation__menu", "menu"])
 		menu.addEventListener("click", this.eventActiveMenu.bind(this))
@@ -80,8 +79,17 @@ export default class Navigation extends Header {
 			})
 		)
 	}
-	render(amountTasks, amountOfCompleted) {
-		const navigation = this.createHtmlElement("div", [
+	changeClass(type, name = "hidden") {
+		switch (type) {
+			case "add":
+				this.navigation.classList.add(name)
+				break
+			case "remove":
+				this.navigation.classList.remove(name)
+		}
+	}
+	render(amountTasks, amountOfCompleted, amountOfTasks) {
+		this.navigation = this.createHtmlElement("div", [
 			"main__navigation",
 			"navigation",
 		])
@@ -105,11 +113,12 @@ export default class Navigation extends Header {
 			"click",
 			this.eventDeleteCompleted.bind(this)
 		)
-		navigation.append(
+		if (!amountOfTasks) this.changeClass("add")
+		this.navigation.append(
 			this.amountOfTasks,
 			this.createMenu(),
 			this.buttonClearCompletedTasks
 		)
-		return navigation
+		return this.navigation
 	}
 }

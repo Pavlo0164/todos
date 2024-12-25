@@ -74,6 +74,9 @@ body {
 		align-items: center;
 		min-height: 3rem;
 		padding: 1rem;
+		&.hidden {
+			display: none;
+		}
 	}
 }
 .navigation {

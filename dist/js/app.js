@@ -8,9 +8,10 @@ class App extends Functions {
 		super()
 		this.tasks = JSON.parse(sessionStorage.getItem("tasks")) || []
 		this.isActiveArrow = false
+		this.typeOfShowedTasks = "all"
 		this.el = this.render()
 	}
-	reshowTasks(typeOfTasks) {
+	reshowTasks(typeOfTasks = "all") {
 		Array.from(this.tasksWrapper.children).forEach((el) => el.remove())
 		switch (typeOfTasks) {
 			case "active":
@@ -37,45 +38,62 @@ class App extends Functions {
 				)
 				break
 		}
-		const amountTasks = this.tasks.reduce(
-			(value, el) => (el.status === "active" ? (value += 1) : value),
-			0
-		)
-		this.navigation.changeAmountOfTasks(amountTasks)
+		this.typeOfShowedTasks = typeOfTasks
+		this.navigation.changeAmountOfTasks(this.calcAmountOfTasks("active"))
 	}
 
 	deleteTask(e) {
 		this.tasks = this.tasks.filter(
 			(task) => task.checkBoxId !== e.detail.taskId
 		)
-		sessionStorage.setItem("tasks", JSON.stringify(this.tasks))
-		this.reshowTasks()
+		this.setTasksToBase("tasks", this.tasks)
+		this.reshowTasks(this.typeOfShowedTasks)
+	}
+	setTasksToBase(name, data) {
+		sessionStorage.setItem(name, JSON.stringify(data))
 	}
 	createTask(e) {
 		this.tasks.push({
 			status: "active",
 			taskValue: e.detail.taskValue,
-			checkBoxId: this.tasks.length + 1,
+			checkBoxId: Math.floor(Math.random() * 10000),
 		})
-		sessionStorage.setItem("tasks", JSON.stringify(this.tasks))
-		this.reshowTasks()
+		this.setTasksToBase("tasks", this.tasks)
+		this.reshowTasks(this.typeOfShowedTasks)
 	}
 	switchStatusOfTasks(e) {
 		const { statusOfTasks, isActiveArrowTasks } = e.detail
 		this.tasks.forEach((task) => (task.status = statusOfTasks))
-		sessionStorage.setItem("tasks", JSON.stringify(this.tasks))
+
+		this.setTasksToBase("tasks", this.tasks)
 		this.isActiveArrow = isActiveArrowTasks
-		this.reshowTasks()
+		this.reshowTasks(this.typeOfShowedTasks)
+	}
+	calcAmountOfTasks(type) {
+		return this.tasks.reduce(
+			(amount, el) => (el.status === type ? (amount += 1) : amount),
+			0
+		)
 	}
 	createMain() {
 		this.main = this.createHtmlElement("main", "main")
 		this.input = new Input()
 		this.input.putElementIn(this.main)
 		this.tasksWrapper = this.createHtmlElement("ul", "main__tasks-wrapper")
-		const amountOfCompleted = this.tasks.reduce(
-			(amount, el) => (el.status === "inactive" ? (amount += 1) : amount),
-			0
-		)
+
+		const observer = new MutationObserver(() => {
+			const tasks = this.tasksWrapper.children
+			if (tasks.length) this.navigation.changeClass("remove")
+			else if (!tasks.length && this.typeOfShowedTasks !== "completed") {
+				this.navigation.changeClass("add")
+			}
+		})
+		observer.observe(this.tasksWrapper, {
+			childList: true,
+		})
+
+		const amountOfCompleted = this.calcAmountOfTasks("inactive")
+
 		this.navigation = new Navigation(this.tasks.length, amountOfCompleted)
 		this.main.append(this.tasksWrapper, this.navigation.el)
 		return this.main
@@ -86,8 +104,8 @@ class App extends Functions {
 			if (task.checkBoxId === taskId) task.status = newStatus
 		})
 		if (this.isActiveArrow) this.input.changeActiveClass()
-		sessionStorage.setItem("tasks", JSON.stringify(this.tasks))
-		this.reshowTasks()
+		this.setTasksToBase("tasks", this.tasks)
+		this.reshowTasks(this.typeOfShowedTasks)
 
 		let isHasUnactive = false
 		this.tasks.forEach((el) =>
@@ -97,7 +115,7 @@ class App extends Functions {
 	}
 	deleteCompletedTasks() {
 		this.tasks = this.tasks.filter((el) => el.status === "active")
-		this.reshowTasks()
+		this.reshowTasks(this.typeOfShowedTasks)
 	}
 	eventShowTasks(e) {
 		this.reshowTasks(e.detail.typeOfShow)
@@ -123,7 +141,7 @@ class App extends Functions {
 		this.header = new Header("todos").putElementIn(wrapper)
 		wrapper.append(this.createMain())
 
-		this.reshowTasks()
+		this.reshowTasks(this.typeOfShowedTasks)
 		return wrapper
 	}
 }
