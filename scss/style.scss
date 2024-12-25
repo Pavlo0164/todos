@@ -72,8 +72,13 @@ body {
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
+		gap: 0.3rem;
 		min-height: 3rem;
 		padding: 1rem;
+		@media (max-width: 550px) {
+			flex-direction: column;
+			gap: 0.8rem;
+		}
 		&.hidden {
 			display: none;
 		}
@@ -82,6 +87,9 @@ body {
 .navigation {
 	&__amount-of-tasks {
 		width: 7rem;
+		@media (max-width: 550px) {
+			width: auto;
+		}
 	}
 	&__menu {
 		display: flex;

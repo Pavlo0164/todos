@@ -148,8 +148,15 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 0.3rem;
   min-height: 3rem;
   padding: 1rem;
+}
+@media (max-width: 550px) {
+  .main__navigation {
+    flex-direction: column;
+    gap: 0.8rem;
+  }
 }
 .main__navigation.hidden {
   display: none;
@@ -157,6 +164,11 @@ body {
 
 .navigation__amount-of-tasks {
   width: 7rem;
+}
+@media (max-width: 550px) {
+  .navigation__amount-of-tasks {
+    width: auto;
+  }
 }
 .navigation__menu {
   display: flex;

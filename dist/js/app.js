@@ -46,6 +46,7 @@ class App extends Functions {
 		this.tasks = this.tasks.filter(
 			(task) => task.checkBoxId !== e.detail.taskId
 		)
+
 		this.setTasksToBase("tasks", this.tasks)
 		this.reshowTasks(this.typeOfShowedTasks)
 	}
@@ -58,7 +59,9 @@ class App extends Functions {
 			taskValue: e.detail.taskValue,
 			checkBoxId: Math.floor(Math.random() * 10000),
 		})
+
 		this.setTasksToBase("tasks", this.tasks)
+		
 		this.reshowTasks(this.typeOfShowedTasks)
 	}
 	switchStatusOfTasks(e) {
@@ -91,9 +94,7 @@ class App extends Functions {
 		observer.observe(this.tasksWrapper, {
 			childList: true,
 		})
-
 		const amountOfCompleted = this.calcAmountOfTasks("inactive")
-
 		this.navigation = new Navigation(this.tasks.length, amountOfCompleted)
 		this.main.append(this.tasksWrapper, this.navigation.el)
 		return this.main
