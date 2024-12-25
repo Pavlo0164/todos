@@ -59,17 +59,7 @@ export default class Task extends Header {
 		checkBox.addEventListener("change", this.eventCheckbox.bind(this))
 		return this.checkBoxLabel
 	}
-	eventDeleteTask(e) {
-		e.preventDefault()
-		this.el.dispatchEvent(
-			new CustomEvent("deleteTask", {
-				bubbles: true,
-				detail: {
-					taskId: this.checkBoxId,
-				},
-			})
-		)
-	}
+
 	createInputTask(innerTask) {
 		this.inputTask = this.createHtmlElement(
 			"label",
@@ -81,6 +71,16 @@ export default class Task extends Header {
 		)
 		this.inputTask.addEventListener("click", this.lockFunction.bind(this)())
 		return this.inputTask
+	}
+	eventDeleteTask(e) {
+		this.el.dispatchEvent(
+			new CustomEvent("deleteTask", {
+				bubbles: true,
+				detail: {
+					taskId: this.checkBoxId,
+				},
+			})
+		)
 	}
 	createButtonDeleteTask() {
 		const close = this.createHtmlElement("span", "task__close")

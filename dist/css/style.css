@@ -111,7 +111,7 @@ body {
   display: flex;
   position: relative;
 }
-.main__tasks-wrapper > .main__task-wrapper:not(:last-child) {
+.main__tasks-wrapper > .main__task-wrapper {
   border-bottom: 0.1rem solid #b4b4b4;
 }
 .main__input-arrow {
@@ -143,6 +143,27 @@ body {
 .main__input:focus {
   box-shadow: 0 0 0.3rem #b83f45;
   outline: none;
+}
+.main__navigation {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  min-height: 3rem;
+  padding: 1rem;
+}
+
+.navigation__amount-of-tasks {
+  width: 7rem;
+}
+.navigation__menu {
+  display: flex;
+  gap: 1rem;
+}
+.navigation__button.unactive {
+  visibility: hidden;
+}
+.navigation__button:hover {
+  text-decoration: underline;
 }
 
 .task__label-checkbox {
@@ -200,4 +221,13 @@ body {
 .task__close:hover {
   background: url("../source/svg/close-red.svg") center/contain no-repeat;
   visibility: visible;
+}
+
+.menu__link {
+  border: 1px solid #f5f5f5;
+  border-radius: 0.3rem;
+  padding: 0.2rem 0.4rem;
+}
+.menu__link.active {
+  border-color: #b83f45;
 }/*# sourceMappingURL=style.css.map */

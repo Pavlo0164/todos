@@ -2,6 +2,7 @@ import Header from "./header.js"
 import Functions from "./func.js"
 import Input from "./input.js"
 import Task from "./task.js"
+import Navigation from "./nav.js"
 class App extends Functions {
 	constructor() {
 		super()
@@ -9,14 +10,40 @@ class App extends Functions {
 		this.isActiveArrow = false
 		this.el = this.render()
 	}
-	reshowTasks() {
+	reshowTasks(typeOfTasks) {
 		Array.from(this.tasksWrapper.children).forEach((el) => el.remove())
-		this.tasks.forEach((task) =>
-			new Task(task.taskValue, task.checkBoxId, task.status).putElementIn(
-				this.tasksWrapper
-			)
+		switch (typeOfTasks) {
+			case "active":
+				this.tasks.forEach((task) => {
+					if (task.status === "active")
+						new Task(task.taskValue, task.checkBoxId, task.status).putElementIn(
+							this.tasksWrapper
+						)
+				})
+				break
+			case "completed":
+				this.tasks.forEach((task) => {
+					if (task.status === "inactive")
+						new Task(task.taskValue, task.checkBoxId, task.status).putElementIn(
+							this.tasksWrapper
+						)
+				})
+				break
+			default:
+				this.tasks.forEach((task) =>
+					new Task(task.taskValue, task.checkBoxId, task.status).putElementIn(
+						this.tasksWrapper
+					)
+				)
+				break
+		}
+		const amountTasks = this.tasks.reduce(
+			(value, el) => (el.status === "active" ? (value += 1) : value),
+			0
 		)
+		this.navigation.changeAmountOfTasks(amountTasks)
 	}
+
 	deleteTask(e) {
 		this.tasks = this.tasks.filter(
 			(task) => task.checkBoxId !== e.detail.taskId
@@ -42,12 +69,15 @@ class App extends Functions {
 	}
 	createMain() {
 		this.main = this.createHtmlElement("main", "main")
-
 		this.input = new Input()
 		this.input.putElementIn(this.main)
 		this.tasksWrapper = this.createHtmlElement("ul", "main__tasks-wrapper")
-
-		this.main.append(this.tasksWrapper)
+		const amountOfCompleted = this.tasks.reduce(
+			(amount, el) => (el.status === "inactive" ? (amount += 1) : amount),
+			0
+		)
+		this.navigation = new Navigation(this.tasks.length, amountOfCompleted)
+		this.main.append(this.tasksWrapper, this.navigation.el)
 		return this.main
 	}
 	changeStatusTask(e) {
@@ -58,10 +88,22 @@ class App extends Functions {
 		if (this.isActiveArrow) this.input.changeActiveClass()
 		sessionStorage.setItem("tasks", JSON.stringify(this.tasks))
 		this.reshowTasks()
+
+		let isHasUnactive = false
+		this.tasks.forEach((el) =>
+			el.status === "inactive" ? (isHasUnactive = true) : ""
+		)
+		this.navigation.changeClassOfButton(isHasUnactive)
+	}
+	deleteCompletedTasks() {
+		this.tasks = this.tasks.filter((el) => el.status === "active")
+		this.reshowTasks()
+	}
+	eventShowTasks(e) {
+		this.reshowTasks(e.detail.typeOfShow)
 	}
 	render() {
 		const wrapper = this.createHtmlElement("div", "wrapper")
-
 		wrapper.addEventListener("createTask", this.createTask.bind(this))
 		wrapper.addEventListener("deleteTask", this.deleteTask.bind(this))
 		wrapper.addEventListener(
@@ -72,9 +114,15 @@ class App extends Functions {
 			"changeTaskStatus",
 			this.changeStatusTask.bind(this)
 		)
-		this.header = new Header("todos").putElementIn(wrapper)
+		wrapper.addEventListener(
+			"deleteCompletedTasks",
+			this.deleteCompletedTasks.bind(this)
+		)
+		wrapper.addEventListener("showTasks", this.eventShowTasks.bind(this))
 
+		this.header = new Header("todos").putElementIn(wrapper)
 		wrapper.append(this.createMain())
+
 		this.reshowTasks()
 		return wrapper
 	}
